@@ -6,10 +6,12 @@
 
 class Model {
  public:
-  Model();
-  Model(const Model& other);
-  Model(Model&& other);
-  ~Model();
+  Model() = default;
+  Model(const Model& other) {
+    CopyModel(other);
+  }
+  Model(Model&& other) = delete;
+  ~Model() = default;
   void Serialize();
   void Deserialize();
 
@@ -40,8 +42,10 @@ class Model {
   void set_indices(const std::vector<std::vector<int>>& indices) {
     vertex_indices_ = indices;
   }
-  Model& operator=(const Model& other);
-  Model operator=(Model&& other);
+  Model& operator=(const Model& other) {
+    CopyModel(other);
+  }
+  Model operator=(Model&& other) = delete;
 
  private:
   std::vector<std::vector<double>> vertex_positions_;
@@ -50,8 +54,9 @@ class Model {
   std::vector<std::vector<int>> vertex_indices_;
   std::string texture_name_;
 
-  void Parser(std::string path);
-  void Writer();
+  void Parser(const std::string& path);
+  void Writer(const std::string& path);
+  void CopyModel(const Model& other);
 };
 
 #endif  // TEST_TASK_1_MODEL_H_
