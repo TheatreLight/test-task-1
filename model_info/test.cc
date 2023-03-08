@@ -3,7 +3,7 @@
 
 TEST (vertex_position, test) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little.obj");
+  model.Deserialize("test_little.obj");
   std::vector<std::vector<double>> current_pos;
   current_pos.emplace_back(std::vector<double>{0.00000031179948, 0.00000092914001, -0.56369644403458});
   EXPECT_EQ(current_pos.size(), model.get_positions().size());
@@ -17,7 +17,7 @@ TEST (vertex_position, test) {
 
 TEST (vertex_normal, test) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little.obj");
+  model.Deserialize("test_little.obj");
   std::vector<std::vector<double>> current_norm;
   current_norm.emplace_back(std::vector<double>{0.05616805702448, -0.99842131137848, 0.00015616317978});
   EXPECT_EQ(current_norm.size(), model.get_normals().size());
@@ -30,7 +30,7 @@ TEST (vertex_normal, test) {
 
 TEST (vertex_uv, test) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little.obj");
+  model.Deserialize("test_little.obj");
   std::vector<std::vector<double>> current_uv;
   current_uv.emplace_back(std::vector<double>{0.73988527059555, 0.69929182529449, 0});
   EXPECT_EQ(current_uv.size(), model.get_normals().size());
@@ -43,7 +43,7 @@ TEST (vertex_uv, test) {
 
 TEST (vertex_index, test) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little.obj");
+  model.Deserialize("test_little.obj");
   std::vector<std::vector<int>> current_ind_line;
   std::vector<std::vector<std::vector<int>>> current_ind;
   current_ind_line.emplace_back(std::vector<int>{121, 5, 5});
@@ -64,14 +64,14 @@ TEST (vertex_index, test) {
 
 TEST (filename, test) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little.obj");
+  model.Deserialize("test_little.obj");
   std::string current_name = "Mushroom_01";
   EXPECT_TRUE(current_name == model.get_name());
 }
 
 TEST (vertex_position, test2) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little2.obj");
+  model.Deserialize("test_little2.obj");
   std::vector<std::vector<double>> current_pos;
   current_pos.emplace_back(std::vector<double>{0.00000031179948, 0.00000092914001, -0.56369644403458});
   current_pos.emplace_back(std::vector<double>{0.39796337485313, 0.02238908968866, -0.39859408140182});
@@ -86,7 +86,7 @@ TEST (vertex_position, test2) {
 
 TEST (vertex_normal, test2) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little2.obj");
+  model.Deserialize("test_little2.obj");
   std::vector<std::vector<double>> current_norm;
   current_norm.emplace_back(std::vector<double>{0.05616805702448, -0.99842131137848, 0.00015616317978});
   current_norm.emplace_back(std::vector<double>{0.05616810172796, -0.99842131137848, 0.00016377013526});
@@ -102,7 +102,7 @@ TEST (vertex_normal, test2) {
 
 TEST (vertex_uv, test2) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little2.obj");
+  model.Deserialize("test_little2.obj");
   std::vector<std::vector<double>> current_uv;
   current_uv.emplace_back(std::vector<double>{0.73988527059555, 0.69929182529449, 0});
   current_uv.emplace_back(std::vector<double>{0.70283806324005, 0.51259750127792, 0});
@@ -118,7 +118,7 @@ TEST (vertex_uv, test2) {
 
 TEST (vertex_index, test2) {
   Model model;
-  model.Deserialize("/home/johan/c_projects/test-task-1/test_little2.obj");
+  model.Deserialize("test_little2.obj");
   std::vector<std::vector<int>> current_ind_line;
   std::vector<std::vector<std::vector<int>>> current_ind;
   current_ind_line.emplace_back(std::vector<int>{121, 5, 5});

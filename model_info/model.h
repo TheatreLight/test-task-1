@@ -1,5 +1,5 @@
-#ifndef TEST_TASK_1_MODEL_H_
-#define TEST_TASK_1_MODEL_H_
+#ifndef MODEL_INFO_MODEL_H_
+#define MODEL_INFO_MODEL_H_
 
 #include <string>
 #include <vector>
@@ -69,4 +69,4 @@ class Model {
   void CopyModel(const Model& other);
 };
 
-#endif  // TEST_TASK_1_MODEL_H_
+#endif  // MODEL_INFO_MODEL_H_
