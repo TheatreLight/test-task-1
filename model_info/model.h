@@ -18,6 +18,8 @@ class Model {
   ~Model() = default;
   void Serialize(const std::string& path);
   void Deserialize(const std::string& path);
+  void SerializeBinary(const std::string& path);
+  void DeserializeBinary(const std::string& path);
 
   std::vector<std::vector<double>> get_positions() {
     return vertex_positions_;
@@ -67,6 +69,18 @@ class Model {
   int PrintBlock(std::ofstream& of_file, std::vector<std::vector<double>> v, std::string mark);
   int PrintBlock(std::ofstream& of_file, std::vector<std::vector<int>> v, std::string mark);
   void CopyModel(const Model& other);
+
+  void SetValueToFile(std::ofstream& out, std::string name, char c);
+  void SetValueToFile(std::ofstream& out, std::vector<std::vector<double>> v, char c);
+  void SetValueToFile(std::ofstream& out, std::vector<std::vector<std::vector<int>>> v, char c);
+  void NumericLineWrite(std::ofstream& out, std::vector<double> v);
+  void NumericLineWrite(std::ofstream& out, std::vector<int> v);
+
+  void GetValueFromFile(std::ifstream& in);
+  char CharRead(std::ifstream& in);
+  std::vector<double> LineRead(std::ifstream& in);
+  std::vector<std::vector<int>> LineIntRead(std::ifstream& in);
+  std::string LineStringRead(std::ifstream& in);
 };
 
 #endif  // MODEL_INFO_MODEL_H_

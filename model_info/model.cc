@@ -7,13 +7,100 @@ void Model::Serialize(const std::string& path) {
   of_file.close();
 }
 
+void Model::SerializeBinary(const std::string& path) {
+  std::ofstream of_file(path, std::ios::binary);
+  SetValueToFile(of_file, vertex_positions_, 'v');
+  SetValueToFile(of_file, vertex_normals_, 'n');
+  SetValueToFile(of_file, vertex_uv_, 't');
+  SetValueToFile(of_file, vertex_indices_, 'f');
+  SetValueToFile(of_file, texture_name_, 'o');
+  of_file.close();
+}
+
 void Model::Deserialize(const std::string& path) {
   if (path.empty()) throw std::out_of_range("File doesn't exist");
   Parser(path);
 }
 
+void Model::DeserializeBinary(const std::string& path) {
+  std::ifstream if_file(path, std::ios::binary);
+  GetValueFromFile(if_file);
+  if_file.close();
+}
+
+void Model::GetValueFromFile(std::ifstream& in) {
+  char ch = CharRead(in);
+  if (ch == 'v') {
+    vertex_positions_.push_back(LineRead(in));
+    while ((ch = CharRead(in)) == 'v') {
+      vertex_positions_.push_back(LineRead(in));
+    }
+  }
+  if (ch == 'n') {
+    vertex_normals_.push_back(LineRead(in));
+    while ((ch = CharRead(in)) == 'n') {
+      vertex_normals_.push_back(LineRead(in));
+    }
+  }
+  if (ch == 't') {
+    vertex_uv_.push_back(LineRead(in));
+    while ((ch = CharRead(in)) == 't') {
+      vertex_uv_.push_back(LineRead(in));
+    }
+  }
+  if (ch == 'f') {
+    vertex_indices_.push_back(LineIntRead(in));
+    while ((ch = CharRead(in)) == 'f') {
+      vertex_indices_.push_back(LineIntRead(in));
+    }
+  }
+  if (ch == 'o') {
+    texture_name_ = LineStringRead(in);
+  }
+}
+
+char Model::CharRead(std::ifstream& in) {
+  char ch = ' ';
+  in.read(&ch, sizeof(char));
+  return ch;
+}
+
+std::vector<double> Model::LineRead(std::ifstream& in) {
+  std::vector<double> v;
+  for (int i = 0; i < 3; ++i) {
+    double d;
+    in.read((char*)&d, sizeof(double));
+    v.push_back(d);
+  }
+  return v;
+}
+
+std::vector<std::vector<int>> Model::LineIntRead(std::ifstream& in) {
+  std::vector<std::vector<int>> v1;
+  for (int i = 0; i < 5; ++i) {
+    std::vector<int> v2;
+    for (int j = 0; j < 3; ++j) {
+      int x;
+      in.read((char*)&x, sizeof(int));
+      v2.push_back(x);
+    }
+    v1.push_back(v2);
+  }
+  return v1;
+}
+
+std::string Model::LineStringRead(std::ifstream& in) {
+  int n = 0;
+  in.read((char*)&n, sizeof(int));
+  std::string output(n, 0);
+  for (int i = 0; i < n; ++i) {
+    in.read(&output[i], sizeof(char));
+  }
+  return output;
+}
+
 void Model::Parser(const std::string& path) {
-  setlocale(LC_ALL, "C");
+  // setlocale(LC_ALL, "C");
   std::fstream f_file;
   f_file.open(path, std::ios::in);
   if (!f_file) throw std::out_of_range("Can't open the file");
@@ -79,7 +166,7 @@ void Model::Writer(std::ofstream& of_file) {
 }
 
 int Model::PrintBlock(std::ofstream& of_file, std::vector<std::vector<double>> v, std::string mark) {
-  int count = 1;
+  int count = 0;
   for (auto it : v) {
     of_file << mark << " ";
     for (auto elem : it) {
@@ -100,6 +187,42 @@ int Model::PrintBlock(std::ofstream& of_file, std::vector<std::vector<int>> v, s
     of_file << " ";
   }
   return 0;
+}
+
+void Model::SetValueToFile(std::ofstream& out, std::string name, char c) {
+  out.write(&c, sizeof(char));
+  int n = name.size();
+  out.write((char*)&n, sizeof(int));
+  out.write(name.c_str(), name.size());
+}
+
+void Model::SetValueToFile(std::ofstream &out, std::vector<std::vector<double>> v, char c)
+{
+  for (const auto& elem : v) {
+    out.write(&c, sizeof(char));
+    NumericLineWrite(out, elem);
+  }
+}
+
+void Model::SetValueToFile(std::ofstream& out, std::vector<std::vector<std::vector<int>>> v, char c) {
+  for (const auto& elem : v) {
+    out.write(&c, sizeof(char));
+    for (const auto& line : elem) {
+      NumericLineWrite(out, line);
+    }
+  }
+}
+
+void Model::NumericLineWrite(std::ofstream& out, std::vector<double> v) {
+  for (const auto& elem : v) {
+    out.write((char*)&elem, sizeof(double));
+  }
+}
+
+void Model::NumericLineWrite(std::ofstream& out, std::vector<int> v) {
+  for (const auto& elem : v) {
+    out.write((char*)&elem, sizeof(int));
+  }
 }
 
 void Model::CopyModel(const Model& other) {
