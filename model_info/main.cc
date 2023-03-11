@@ -2,7 +2,7 @@
 
 int main() {
   Model model;
-  model.Deserialize("test.obj");
+  model.Deserialize("test_little2.obj");
   model.SerializeBinary("b_test.bin");
 
   Model new_model;

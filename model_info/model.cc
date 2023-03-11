@@ -77,7 +77,9 @@ std::vector<double> Model::LineRead(std::ifstream& in) {
 
 std::vector<std::vector<int>> Model::LineIntRead(std::ifstream& in) {
   std::vector<std::vector<int>> v1;
-  for (int i = 0; i < 5; ++i) {
+  size_t size;
+  in.read((char*)&size, sizeof(size_t));
+  for (int i = 0; i < (int)size; ++i) {
     std::vector<int> v2;
     for (int j = 0; j < 3; ++j) {
       int x;
@@ -128,7 +130,7 @@ void Model::LineDeserialize(std::string line) {
       std::vector<std::vector<int>> v_line;
       while ((pos = line.find(' ', 0)) != -1) {
         v.clear();
-        v = (ParseLine<int>(0, line.substr(0, pos), '/'));
+        v = ParseLine<int>(0, line.substr(0, pos), '/');
         line.erase(0, pos+1);
         v_line.push_back(v);
       }
@@ -207,6 +209,8 @@ void Model::SetValueToFile(std::ofstream &out, std::vector<std::vector<double>> 
 void Model::SetValueToFile(std::ofstream& out, std::vector<std::vector<std::vector<int>>> v, char c) {
   for (const auto& elem : v) {
     out.write(&c, sizeof(char));
+    size_t size = elem.size();
+    out.write((char*)&size, sizeof(size_t));
     for (const auto& line : elem) {
       NumericLineWrite(out, line);
     }
