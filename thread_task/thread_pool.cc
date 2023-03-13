@@ -1,19 +1,24 @@
-#include "thread.h"
+#include "thread_pool.h"
 
 ThreadPool::ThreadPool(uint num) {
   for (int i = 0; i < num; ++i) {
-    pool_.emplace_back(&Go, this);
+    pool_.emplace_back(&ThreadPool::Go, this);
   }
 }
 
 ThreadPool::~ThreadPool() {
   quit_ = true;
+  for (auto& elem : pool_) {
+    cv_.notify_all();
+    if (elem.joinable())
+      elem.join();
+  }
 }
 
 void ThreadPool::Go() {
   while (!quit_) {
     std::unique_lock<std::mutex> ul(mtx1_);
-    cv_.wait(ul, wake_up_);
+    cv_.wait(ul, [&]()->bool{return wake_up_;});
     if (!f_queue_.empty()) {
       auto task = f_queue_.front();
       f_queue_.pop();

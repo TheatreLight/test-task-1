@@ -13,7 +13,7 @@ class ThreadPool {
   explicit ThreadPool(uint num = std::thread::hardware_concurrency());
   ThreadPool(const ThreadPool& other);
   ThreadPool(ThreadPool&& other) = delete;
-  ~ThreadPool() = default;
+  ~ThreadPool();
   ThreadPool operator=(const ThreadPool& other);
   ThreadPool operator=(ThreadPool&& other) = delete;
   void Go();
